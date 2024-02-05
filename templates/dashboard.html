@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>Your Website</title>
     <style>
+        html, body {
+            overflow: hidden;
+            height: 100%;
+            margin: 0;
+        }
+
         .overlay {
             display: none;
             position: absolute;
-            bottom: 0;
+            
+            top:541px;
             left: 0;
             width: 100%;
-            max-height: 10%;
+            height: 10%;
             background: rgba(0, 0, 0, 0.7);
             color: white;
             overflow: hidden;
@@ -20,12 +28,63 @@
 
         #video-container {
             position: relative;
-            
+            height: 93vh;
+            overflow: hidden;
+        }
+        .video{
+            border: 2px solid #333;
+            border-radius: 8px;
+            height: 87vh;
+        }
+
+        /* Updated styles for sidebar and main container */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .flex-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            flex: 0 0 27%;
+            background-color: #e2e8f0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .main-container {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+            position: absolute;
+            top: 7.5%;
+            left: 27.5%;
+            overflow: hidden;
+        }
+                /* Center play/pause button */
+                #play-pause-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
         }
     </style>
 </head>
+
 <body class="font-sans bg-gray-100">
-<div class="page">
+
     <!-- Navbar -->
     <nav class="bg-gray-800 p-4 text-white">
         <div class="container mx-auto">
@@ -42,18 +101,18 @@
         </div>
     </nav>
 
-    <!-- Content area with flex layout -->
-    <div class="flex relative">
+    <div class="flex-container">
 
         <!-- Left Sidebar -->
-        <div class="bg-gray-200 w-1/5 p-4 h-screen">
+        <div class="sidebar">
             <h2 class="text-lg font-semibold mb-4">Sidebar</h2>
-
             <!-- Dropdown 1 -->
             <div class="mb-2">
-                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none" onclick="toggleDropdown('dropdown1')">
+                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none"
+                    onclick="toggleDropdown('dropdown1')">
                     <span>Dropdown 1</span>
-                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
@@ -68,9 +127,11 @@
             <!-- Repeat the above block for Dropdowns 2 to 5 -->
             <!-- Dropdown 2 -->
             <div class="mb-2">
-                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none" onclick="toggleDropdown('dropdown2')">
+                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none"
+                    onclick="toggleDropdown('dropdown2')">
                     <span>Dropdown 2</span>
-                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
@@ -85,9 +146,11 @@
             <!-- Repeat the above block for Dropdowns 3 to 5 -->
             <!-- Dropdown 3 -->
             <div class="mb-2">
-                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none" onclick="toggleDropdown('dropdown3')">
+                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none"
+                    onclick="toggleDropdown('dropdown3')">
                     <span>Dropdown 3</span>
-                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
@@ -101,9 +164,11 @@
 
             <!-- Dropdown 4 -->
             <div class="mb-2">
-                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none" onclick="toggleDropdown('dropdown4')">
+                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none"
+                    onclick="toggleDropdown('dropdown4')">
                     <span>Dropdown 4</span>
-                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
@@ -117,9 +182,11 @@
 
             <!-- Dropdown 5 -->
             <div class="mb-2">
-                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none" onclick="toggleDropdown('dropdown5')">
+                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none"
+                    onclick="toggleDropdown('dropdown5')">
                     <span>Dropdown 5</span>
-                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
@@ -130,14 +197,13 @@
                     <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 3</a>
                 </div>
             </div>
-
         </div>
 
-       <!-- main -->
-        <div class="">
-            <div id="video-container" class="flex justify-center video-container">
-                <video id="video" class="" muted playsinline>
-                    <source src="{{ data_json[1].video }}" type="video/mp4">
+        <!-- main -->
+        <div class="main-container">
+            <div id="video-container" class="mb-4 flex justify-center video-container">
+                <video id="video" class="video" muted playsinline>
+                    <source  src="{{ data_json[1].video }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
                 <div id="overlay" class="overlay">
@@ -145,76 +211,84 @@
                 </div>
             </div>
 
-            <!-- Play, Pause, Next Buttons -->
-            <div class="flex items-center justify-center space-x-4">
-                <button onclick="play()">Play</button>
-                <button onclick="pause()">Pause</button>
-            </div>
+            <button id="play-pause-btn" onclick="togglePlayPause()">▶️</button>
         </div>
         <!-- end: main -->
-    </div>
-        <!-- Add your audio elements here -->
-        <audio id="audio" src="{{ data_json[1].audio }}"></audio>
 
-<script>
-    function toggleDropdown(dropdownId) {
+    </div>
+
+    <!-- Add your audio elements here -->
+    <audio id="audio" src="{{ data_json[1].audio }}"></audio>
+
+    <script>
+        function toggleDropdown(dropdownId) {
             var dropdown = document.getElementById(dropdownId);
             dropdown.classList.toggle('hidden');
         }
-    const video = document.getElementById('video');
-    const audio = document.getElementById('audio');
-    const overlay = document.getElementById('overlay');
-    const overlayText = document.getElementById('overlay-text');
-    var data = {{ data_json | tojson }};
-    let currentScene = 1;
 
-    function play() {
-        // Autoplay video
-        video.play().then(() => {
-            // Autoplay audio
-            audio.play();
+        const video = document.getElementById('video');
+        const audio = document.getElementById('audio');
+        const overlay = document.getElementById('overlay');
+        const overlayText = document.getElementById('overlay-text');
+        var data = {{ data_json | tojson }};
+        let currentScene = 1;
 
-            // Display overlay with text
-            overlayText.innerHTML = data[currentScene].text;
-            overlay.style.display = 'block';
-            overlay.style.animation = 'fade-in 2s forwards';
+        function play() {
+            // Autoplay video
+            video.play().then(() => {
+                // Autoplay audio
+                audio.play();
 
-            // Set up event listener for audio end to trigger the next scene
-            audio.addEventListener('ended', next);
-        }).catch((error) => {
-            console.error('Autoplay failed:', error);
-        });
-    }
+                // Display overlay with text
+                overlayText.innerHTML = data[currentScene].text;
+                overlay.style.display = 'block';
+                overlay.style.animation = 'fade-in 2s forwards';
 
-    function pause() {
-        video.pause();
-        audio.pause();
-    }
-
-    function next() {
-        // Reset overlay animation
-        overlay.style.animation = 'none';
-        void overlay.offsetWidth; // Trigger reflow
-        overlay.style.animation = null;
-
-        // Hide overlay
-        overlay.style.display = 'none';
-
-        // Increment scene
-        currentScene++;
-        if (currentScene > {{scene_length-1}}) {
-            // Reset to the first scene if reached the end
-            currentScene = 1;
+                // Set up event listener for audio end to trigger the next scene
+                audio.addEventListener('ended', next);
+            }).catch((error) => {
+                console.error('Autoplay failed:', error);
+            });
         }
 
-        // Update video, audio, and overlay text
-        video.src = data[currentScene].video;
-        audio.src = data[currentScene].audio;
-        overlayText.innerHTML = data[currentScene].text;
+        function pause() {
+            video.pause();
+            audio.pause();
+        }
 
-        // Play video and audio
-        play();
-    }
-</script>
+        function togglePlayPause() {
+            if (video.paused) {
+                play();
+            } else {
+                pause();
+            }
+        }
+
+        function next() {
+            // Reset overlay animation
+            overlay.style.animation = 'none';
+            void overlay.offsetWidth; // Trigger reflow
+            overlay.style.animation = null;
+
+            // Hide overlay
+            overlay.style.display = 'none';
+
+            // Increment scene
+            currentScene++;
+            if (currentScene > {{scene_length-1}}) {
+                // Reset to the first scene if reached the end
+                currentScene = 1;
+            }
+
+            // Update video, audio, and overlay text
+            video.src = data[currentScene].video;
+            audio.src = data[currentScene].audio;
+            overlayText.innerHTML = data[currentScene].text;
+
+            // Play video and audio
+            play();
+        }
+        </script>
 </body>
+
 </html>
