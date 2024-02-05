@@ -118,10 +118,13 @@ def academics():
 @app.route('/dashboard')
 def dashboard():
     if 'google_token' not in session:
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
 
-    user_info = google.get('userinfo')
-    user_id = user_info.data['id']
+    try:
+        user_info = google.get('userinfo')
+        user_id = user_info.data['id']
+    except:
+        return redirect(url_for('logout'))
 
     # Retrieve user information from the database
     user_entry = mongo.db.users.find_one({'user_id': user_id})
