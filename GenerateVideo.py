@@ -1,6 +1,24 @@
+import g4f
+from gtts import gTTS
+
 class GenerateVideo:
     def __init__(self, topic):
         self.topic = topic  
+
+    def generate_content(self, text):
+        try:
+            response = g4f.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": text}])
+            content_list = response.split("\n")
+            return content_list
+        except Exception as e:
+            print("Error: ", e)
+
+    def search_video(self, text):
+        return ""
+    
+    def generate_audio(self, text, filename, language='en'):
+        tts = gTTS(text=text, lang=language, slow=False)
+        tts.save(filename)
 
     def start(self):
 
@@ -36,6 +54,18 @@ class GenerateVideo:
                 "audio": "/static/audio/6.mp3",
             },
         }
+
+        # self.prompt = "" + self.topic
+        # content_length = self.generate_content(self.prompt)
+        # index = 1
+
+
+        # for text in content_length:
+        #     data[index] = {
+        #         "text": text,
+        #         "video": self.search_video(),
+        #         "audio": self.generate_audio(text, f'{index}.mp3')
+        #     }   
 
         return data 
     

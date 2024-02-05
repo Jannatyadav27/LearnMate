@@ -42,3 +42,4 @@ pymongo
 gunicorn
 python-dotenv
 Flask-PyMongo
+gtts

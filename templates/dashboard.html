@@ -133,9 +133,9 @@
         </div>
 
        <!-- main -->
-        <div class="p-4">
-            <div id="video-container flex justify-center" class="mb-4 flex justify-center video-container">
-                <video id="video" style="height: 480px; width: 480px;" muted playsinline>
+        <div class="p-4" style="margin-left: 250px; ">
+            <div id="video-container" class="mb-4 flex justify-center video-container">
+                <video id="video" style="height: 720px; width: 650px;" muted playsinline>
                     <source src="{{ data_json[1].video }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
@@ -148,7 +148,6 @@
             <div class="flex items-center justify-center space-x-4">
                 <button onclick="play()">Play</button>
                 <button onclick="pause()">Pause</button>
-                <button onclick="next()">Next</button>
             </div>
         </div>
         <!-- end: main -->
