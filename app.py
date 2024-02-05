@@ -6,6 +6,8 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+from GenerateVideo import GenerateVideo
+
 MONGODB_URI          = os.environ.get('MONGODB_URI') 
 GOOGLE_CLIENT_ID     = os.environ.get('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET') 
@@ -90,7 +92,16 @@ def academics():
 
     if request.method == 'POST':
         # Save the academic information to the database
+
+        """"
+        College
+        Degree
+        Year
+        College_Name/School_Name  
+        """
+
         college = request.form['college']
+
         class_year = request.form['class_year']
         board = request.form['board']
 
@@ -115,8 +126,11 @@ def dashboard():
     # Retrieve user information from the database
     user_entry = mongo.db.users.find_one({'user_id': user_id})
 
+    videogen = GenerateVideo("photosynthesis")
+    data_json = videogen.start()
+
     # Render the dashboard template with user information
-    return render_template('dashboard.html', user_entry=user_entry)
+    return render_template('dashboard.html', user_entry=user_entry, data=data_json)
 
 if __name__ == '__main__':
     app.run(debug=True)
