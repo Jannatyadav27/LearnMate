@@ -20,11 +20,12 @@
 
         #video-container {
             position: relative;
+            
         }
     </style>
 </head>
 <body class="font-sans bg-gray-100">
-
+<div class="page">
     <!-- Navbar -->
     <nav class="bg-gray-800 p-4 text-white">
         <div class="container mx-auto">
@@ -133,9 +134,9 @@
         </div>
 
        <!-- main -->
-        <div class="p-4" style="margin-left: 250px; ">
-            <div id="video-container" class="mb-4 flex justify-center video-container">
-                <video id="video" style="height: 720px; width: 650px;" muted playsinline>
+        <div class="">
+            <div id="video-container" class="flex justify-center video-container">
+                <video id="video" class="" muted playsinline>
                     <source src="{{ data_json[1].video }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
@@ -151,11 +152,15 @@
             </div>
         </div>
         <!-- end: main -->
-
+    </div>
         <!-- Add your audio elements here -->
         <audio id="audio" src="{{ data_json[1].audio }}"></audio>
 
 <script>
+    function toggleDropdown(dropdownId) {
+            var dropdown = document.getElementById(dropdownId);
+            dropdown.classList.toggle('hidden');
+        }
     const video = document.getElementById('video');
     const audio = document.getElementById('audio');
     const overlay = document.getElementById('overlay');
