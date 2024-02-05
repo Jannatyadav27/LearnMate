@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="mt-5">
+        <h2 class="mb-4">Dashboard</h2>
+        <div class="row">
+            <div class="col-md-3">
+                <img src="{{ user_entry.profile_pic }}" alt="Profile Pic" class="img-fluid rounded-circle mb-3">
+                <p>Rank: {{ user_entry.rank }}</p>
+                <p>Hours Spent: {{ user_entry.hours_spent }}</p>
+            </div>
+            <div class="col-md-6">
+                <h4>Course Curriculum</h4>
+                <!-- Add your course curriculum content here -->
+            </div>
+            <div class="col-md-3">
+                <h4>YouTube Video</h4>
+                <!-- Add your YouTube video embed code or link here -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
