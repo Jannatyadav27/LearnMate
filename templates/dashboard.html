@@ -1,22 +1,184 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Your Website</title>
+    <style>
+        .overlay {
+            display: none;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            max-height: 10%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            overflow: hidden;
+        }
 
-{% block content %}
-    <div class="mt-5">
-        <h2 class="mb-4">Dashboard</h2>
-        <div class="row">
-            <div class="col-md-3">
-                <img src="{{ user_entry.profile_pic }}" alt="Profile Pic" class="img-fluid rounded-circle mb-3">
-                <p>Rank: {{ user_entry.rank }}</p>
-                <p>Hours Spent: {{ user_entry.hours_spent }}</p>
+        #container1 {
+            position: relative;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-gray-800 p-4 text-white">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center">
+                <div class="text-xl font-bold">Your Logo</div>
+                <!-- Add your navbar links here -->
+                <div class="space-x-4">
+                    <a href="#" class="hover:text-gray-300">Home</a>
+                    <a href="#" class="hover:text-gray-300">About</a>
+                    <a href="#" class="hover:text-gray-300">Services</a>
+                    <a href="#" class="hover:text-gray-300">Contact</a>
+                </div>
             </div>
-            <div class="col-md-6">
-                <h4>Course Curriculum</h4>
-                <!-- Add your course curriculum content here -->
+        </div>
+    </nav>
+
+    <!-- Content area with flex layout -->
+    <div class="flex relative">
+
+        <!-- Left Sidebar -->
+        <div class="bg-gray-200 w-1/5 p-4 h-screen">
+            <h2 class="text-lg font-semibold mb-4">Sidebar</h2>
+
+            <!-- Dropdown 1 -->
+            <div class="mb-2">
+                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none" onclick="toggleDropdown('dropdown1')">
+                    <span>Dropdown 1</span>
+                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <!-- Dropdown 1 content -->
+                <div id="dropdown1" class="ml-2 hidden">
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 1</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 2</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 3</a>
+                </div>
             </div>
-            <div class="col-md-3">
-                <h4>YouTube Video</h4>
-                <!-- Add your YouTube video embed code or link here -->
+
+            <!-- Repeat the above block for Dropdowns 2 to 5 -->
+            <!-- Dropdown 2 -->
+            <div class="mb-2">
+                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none" onclick="toggleDropdown('dropdown2')">
+                    <span>Dropdown 2</span>
+                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <!-- Dropdown 2 content -->
+                <div id="dropdown2" class="ml-2 hidden">
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 1</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 2</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 3</a>
+                </div>
+            </div>
+
+            <!-- Repeat the above block for Dropdowns 3 to 5 -->
+            <!-- Dropdown 3 -->
+            <div class="mb-2">
+                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none" onclick="toggleDropdown('dropdown3')">
+                    <span>Dropdown 3</span>
+                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <!-- Dropdown 3 content -->
+                <div id="dropdown3" class="ml-2 hidden">
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 1</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 2</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 3</a>
+                </div>
+            </div>
+
+            <!-- Dropdown 4 -->
+            <div class="mb-2">
+                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none" onclick="toggleDropdown('dropdown4')">
+                    <span>Dropdown 4</span>
+                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <!-- Dropdown 4 content -->
+                <div id="dropdown4" class="ml-2 hidden">
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 1</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 2</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 3</a>
+                </div>
+            </div>
+
+            <!-- Dropdown 5 -->
+            <div class="mb-2">
+                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none" onclick="toggleDropdown('dropdown5')">
+                    <span>Dropdown 5</span>
+                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <!-- Dropdown 5 content -->
+                <div id="dropdown5" class="ml-2 hidden">
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 1</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 2</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 3</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 p-4 relative">
+            <!-- Container 1: Image Container -->
+            {{data[2].text}}
+            {{data[2].audio}}
+            {{data[2].video}}
+            <div id="container1" class="mb-4 flex justify-center">
+                <!-- Add your image source here -->
+                <img style="height: 480px; width: 480px;" src="https://media0.giphy.com/avatars/PantsBear/FdhBAsdK5VJW.gif" alt="Image" class="w-full h-auto">
+                <!-- Container 2: Subtitle Container (Initially hidden) -->
+                <div id="container2" class="overlay">
+                    <h2 class="text-2xl font-bold mb-4">Subtitle Container</h2>
+                    <!-- Add your subtitle content here -->
+                    <p>This is the subtitle content for the image.</p>
+                </div>
+            </div>
+
+
+            <!-- Play, Pause, Next Buttons -->
+            <div class="flex items-center justify-center space-x-4">
+                <button onclick="playPause()">Play</button>
+                <button onclick="pause()">Pause</button>
+                <button onclick="next()">Next</button>
             </div>
         </div>
     </div>
-{% endblock %}
+
+    <script>
+        function toggleDropdown(dropdownId) {
+            var dropdown = document.getElementById(dropdownId);
+            dropdown.classList.toggle('hidden');
+        }
+
+        function playPause() {
+            var container2 = document.getElementById('container2');
+            container2.style.display = 'block';
+        }
+
+        function pause() {
+            var container2 = document.getElementById('container2');
+            container2.style.display = 'none';
+        }
+
+        function next() {
+            // Add logic for the next button if needed
+        }
+    </script>
+
+</body>
+</html>
