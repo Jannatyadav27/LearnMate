@@ -100,16 +100,38 @@ def academics():
         College_Name/School_Name  
         """
 
-        college = request.form['college']
+        educationType = request.form['educationType'] # Collge/School
+        stream  = request.form['stream']  # B.tect/BSC
+        course  = request.form['course']  # CS/IT/ECE
+        year    = request.form['year']    # 1/2/3/4
+        college_name = request.form['college_name']
 
-        class_year = request.form['class_year']
-        board = request.form['board']
+        print("educationType: ", educationType)
+        print("stream: ", stream)
+        print("course: ", course)
+        print('college_name: ', college_name)
 
         user_info = google.get('userinfo')
         user_id = user_info.data['id']
+        email   = user_info.data['email']
+        picture = user_info.data['picture']
+        name    = user_info.data['name']
 
         # Save the academic information to the database
-        mongo.db.users.insert_one({'user_id': user_id, 'college': college, 'class_year': class_year, 'board': board})
+        mongo.db.users.insert_one({
+            'user_id': user_id, 
+            'email': email,
+            'picture': picture,
+            'name': name, 
+            'rank': mongo.db.users.count_documents({}) + 1, 
+            'hours_spend': 0,
+
+            'educationType': educationType, 
+            'stream': stream, 
+            'course': course,
+            'year': year,
+            'college_name': college_name,
+        })
 
         return redirect(url_for('dashboard'))
 
@@ -128,7 +150,6 @@ def dashboard():
 
     # Retrieve user information from the database
     user_entry = mongo.db.users.find_one({'user_id': user_id})
-
     videogen = GenerateVideo("photosynthesis")
     data_json = videogen.start()
     scene_length = len(data_json)

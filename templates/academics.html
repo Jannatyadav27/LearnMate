@@ -1,22 +1,281 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" co-
+    ntent="width=device-width, initial-scale=1.0">
+    <title>LearnMate | Education Selection</title>
+    <link rel="stylesheet" href="/static/css/academics.css">
+    <script src="https://kit.fontawesome.com/c4254e24a8.js" crossorigin="anonymous"></script>
+        
+</head>
+<body>
+    <div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+     </div>
+    <div id="container">
+    <form method="post">
+        <h1>Education Selection</h1>
+        <select name="educationType" id="educationType" onchange="showOptions()">
+            <option value="">Select Education Type</option>
+            <option value="college">College</option>
+            <option value="school">School</option>
+        </select>
 
-{% block content %}
-    <div class="mt-5">
-        <h2 class="mb-4">Academics</h2>
-        <form method="post">
-            <div class="mb-3">
-                <label for="college" class="form-label">College/School</label>
-                <input type="text" class="form-control" id="college" name="college" required>
+        <div  id="collegeOptions" style="display: none;">
+            <select name="stream" id="stream" onchange="showCourses()">
+                <option value="">Select Stream</option>
+                <option value="btech">B.Tech</option>
+                <option value="bca">BCA</option>
+                <option value="mtech">M.Tech</option>
+                <option value="bsc">B.Sc</option>
+                <option value="msc">M.Sc</option>
+                <option value="mbbs">MBBS</option>
+            </select>
+
+            <div id="courseOptions" style="display: none;">
+                <select id="course" onchange="showYears()">
+                    <option value="">Select Course</option>
+                </select>
             </div>
-            <div class="mb-3">
-                <label for="class_year" class="form-label">Class Standards or College Year</label>
-                <input type="text" class="form-control" id="class_year" name="class_year" required>
+
+            <div id="yearOptions" style="display: none;">
+                <select id="year" onchange="showCollegeInput()">
+                    <option value="">Select Year</option>
+                </select>
             </div>
-            <div class="mb-3">
-                <label for="board" class="form-label">CBSE/State board/B.Tech</label>
-                <input type="text" class="form-control" id="board" name="board" required>
+
+            <div id="collegeSelection" style="display: none;">
+                <input name="college_name" type="text" id="collegeInput" placeholder="Enter College Name">
             </div>
-            <button type="submit" class="btn btn-primary">Save</button>
-        </form>
+        </div>
+
+        <div id="schoolOptions" style="display: none;">
+            <select id="class" onchange="showBoard()">
+                <option value="">Select Class</option>
+                <option value="class1">Class 1</option>
+                <option value="class2">Class 2</option>
+                <option value="class3">Class 3</option>
+                <option value="class4">Class 4</option>
+                <option value="class5">Class 5</option>
+                <option value="class6">Class 6</option>
+                <option value="class7">Class 7</option>
+                <option value="class8">Class 8</option>
+                <option value="class9">Class 9</option>
+                <option value="class10">Class 10</option>
+                <option value="class11">Class 11</option>
+                <option value="class12">Class 12</option>
+            </select>
+
+            <div id="boardOptions" style="display: none;">
+                <select id="board" onchange="showSubmit()">
+                    <option value="">Select Board</option>
+                    <option value="cbse">CBSE</option>
+                    <option value="icse">ICSE</option>
+                    <option value="state">State Govt</option>
+                </select>
+            </div>
+        </div>
+
+        <button id="submitBtn" type="submit" onclick="submitForm()">Submit</button>
+    </form>
     </div>
-{% endblock %}
+
+    <script>
+        var currentStep = 0; 
+
+        function showOptions() {
+            currentStep = 0; 
+            var educationType = document.getElementById("educationType").value;
+            var collegeOptions = document.getElementById("collegeOptions");
+            var schoolOptions = document.getElementById("schoolOptions");
+            var submitBtn = document.getElementById("submitBtn");
+
+            if (educationType === "college") {
+                collegeOptions.style.display = "block";
+                schoolOptions.style.display = "none";
+            } else if (educationType === "school") {
+                collegeOptions.style.display = "none";
+                schoolOptions.style.display = "block";
+            } else {
+                collegeOptions.style.display = "none";
+                schoolOptions.style.display = "none";
+            }
+
+            submitBtn.style.display = "none"; 
+        }
+
+        function showCourses() {
+            currentStep = 1; 
+            var stream = document.getElementById("stream").value;
+            var courseOptions = document.getElementById("courseOptions");
+            var submitBtn = document.getElementById("submitBtn");
+
+            if (stream === "") {
+                currentStep = 0; 
+            }
+
+            if (stream === "btech") {
+                courseOptions.innerHTML = `
+                    <select name="course" id="course" onchange="showYears()">
+                        <option value="">Select Course</option>
+                        <option value="cs">CS</option>
+                        <option value="it">IT</option>
+                        <option value="ece">ECE</option>
+                        <option value="me">ME</option>
+                        <option value="ce">CE</option>
+                    </select>`;
+            } else if (stream === "bca") {
+                courseOptions.innerHTML = `
+                    <select name="course" id="course" onchange="showYears()">
+                        <option value="">Select Course</option>
+                        <option value="cyber_security">Cyber Security</option>
+                        <option value="computer_network">Computer Network</option>
+                        <option value="ai">AI</option>
+                        <option value="ml">ML</option>
+                    </select>`;
+            } else if (stream === "mtech" || stream === "msc") {
+                courseOptions.innerHTML = `
+                    <select name="course" id="course" onchange="showYears()">
+                        <option value="">Select Course</option>
+                        <option value="software_engg">Software Engineering</option>
+                        <option value="mechanical_engg">Mechanical Engineering</option>
+                        <option value="civil_engg">Civil Engineering</option>
+                    </select>`;
+            } else if (stream === "mbbs") {
+                courseOptions.innerHTML = `
+                    <select name="course" id="course" onchange="showYears()">
+                        <option value="">Select Course</option>
+                        <option value="forensic_medicine">Forensic Medicine</option>
+                        <option value="cardiology">Cardiology</option>
+                        <option value="dermatology">Dermatology</option>
+                        <option value="orthopaedics">Orthopaedics</option>
+                        <option value="psychiatry">Psychiatry</option>
+                    </select>`;
+            }
+
+            courseOptions.style.display = "block";
+            submitBtn.style.display = "none"; 
+        }
+
+        function showYears() {
+            currentStep = 2;
+            var stream = document.getElementById("stream").value;
+            var course = document.getElementById("course").value;
+            var yearOptions = document.getElementById("yearOptions");
+            var submitBtn = document.getElementById("submitBtn");
+
+            if (stream === "" || course === "") {
+                currentStep = 1; 
+            }
+
+            if (stream === "btech" && course !== "") {
+                yearOptions.innerHTML = `
+                    <select name="year" id="year" onchange="showCollegeInput()">
+                        <option value="">Select Year</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>`;
+            } else if ((stream === "bca" || stream === "bsc" || stream === "msc") && course !== "") {
+                yearOptions.innerHTML = `
+                    <select name="year"  id="year" onchange="showCollegeInput()">
+                        <option value="">Select Year</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>`;
+            } else if ((stream === "mtech" || stream === "mbbs") && course !== "") {
+                yearOptions.innerHTML = `
+                    <select name="year"  id="year" onchange="showCollegeInput()">
+                        <option value="">Select Year</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>`;
+            }
+
+            yearOptions.style.display = "block";
+            submitBtn.style.display = "none"; 
+        }
+
+        function showCollegeInput() {
+            currentStep = 3; 
+            var year = document.getElementById("year").value;
+            var collegeSelection = document.getElementById("collegeSelection");
+            var collegeInput = document.getElementById("collegeInput");
+            var submitBtn = document.getElementById("submitBtn");
+
+            if (year === "") {
+                currentStep = 2; 
+            }
+
+            if (year !== "") {
+                collegeSelection.style.display = "block";
+                submitBtn.style.display = "block";
+            } else {
+                collegeSelection.style.display = "none";
+                submitBtn.style.display = "none";
+            }
+        }
+
+        function showBoard() {
+            currentStep = 1; 
+            var classSelection = document.getElementById("class").value;
+            var boardOptions = document.getElementById("boardOptions");
+            var submitBtn = document.getElementById("submitBtn");
+
+            if (classSelection === "") {
+                currentStep = 0; 
+            }
+
+            if (classSelection !== "") {
+                boardOptions.innerHTML = `
+                    <select name="board" id="board" onchange="showSubmit()">
+                        <option value="">Select Board</option>
+                        <option value="cbse">CBSE</option>
+                        <option value="icse">ICSE</option>
+                        <option value="state">State Govt</option>
+                    </select>`;
+                boardOptions.style.display = "block";
+                submitBtn.style.display = "none"; 
+            }
+        }
+
+        function showSubmit() {
+            currentStep = 2; 
+            document.getElementById("submitBtn").style.display = "block";
+        }
+
+       
+
+        window.onbeforeunload = function () {
+            
+            currentStep = 0;
+        }
+
+        y
+        window.onpopstate = function (event) {
+            if (event.state !== null) {
+                currentStep = event.state.step;
+                showOptions();
+                showCourses();
+                showYears();
+                showCollegeInput();
+            }
+        }
+
+        
+        function updateHistory() {
+            history.pushState({ step: currentStep }, "");
+        }
+
+        
+        document.querySelectorAll("select").forEach(function (select) {
+            select.addEventListener("change", updateHistory);
+        });
+    </script>
+</body>
+</html>
