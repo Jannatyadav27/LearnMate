@@ -18,7 +18,7 @@
             overflow: hidden;
         }
 
-        #container1 {
+        #video-container {
             position: relative;
         }
     </style>
@@ -132,53 +132,85 @@
 
         </div>
 
-        <!-- Main Content Area -->
-        <div class="flex-1 p-4 relative">
-            <!-- Container 1: Image Container -->
-            {{data[2].text}}
-            {{data[2].audio}}
-            {{data[2].video}}
-            <div id="container1" class="mb-4 flex justify-center">
-                <!-- Add your image source here -->
-                <img style="height: 480px; width: 480px;" src="https://media0.giphy.com/avatars/PantsBear/FdhBAsdK5VJW.gif" alt="Image" class="w-full h-auto">
-                <!-- Container 2: Subtitle Container (Initially hidden) -->
-                <div id="container2" class="overlay">
-                    <h2 class="text-2xl font-bold mb-4">Subtitle Container</h2>
-                    <!-- Add your subtitle content here -->
-                    <p>This is the subtitle content for the image.</p>
+       <!-- main -->
+        <div class="p-4">
+            <div id="video-container flex justify-center" class="mb-4 flex justify-center video-container">
+                <video id="video" style="height: 480px; width: 480px;" muted playsinline>
+                    <source src="{{ data_json[1].video }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div id="overlay" class="overlay">
+                    <p id="overlay-text"></p>
                 </div>
             </div>
 
-
             <!-- Play, Pause, Next Buttons -->
             <div class="flex items-center justify-center space-x-4">
-                <button onclick="playPause()">Play</button>
+                <button onclick="play()">Play</button>
                 <button onclick="pause()">Pause</button>
                 <button onclick="next()">Next</button>
             </div>
         </div>
-    </div>
+        <!-- end: main -->
 
-    <script>
-        function toggleDropdown(dropdownId) {
-            var dropdown = document.getElementById(dropdownId);
-            dropdown.classList.toggle('hidden');
+        <!-- Add your audio elements here -->
+        <audio id="audio" src="{{ data_json[1].audio }}"></audio>
+
+<script>
+    const video = document.getElementById('video');
+    const audio = document.getElementById('audio');
+    const overlay = document.getElementById('overlay');
+    const overlayText = document.getElementById('overlay-text');
+    var data = {{ data_json | tojson }};
+    let currentScene = 1;
+
+    function play() {
+        // Autoplay video
+        video.play().then(() => {
+            // Autoplay audio
+            audio.play();
+
+            // Display overlay with text
+            overlayText.innerHTML = data[currentScene].text;
+            overlay.style.display = 'block';
+            overlay.style.animation = 'fade-in 2s forwards';
+
+            // Set up event listener for audio end to trigger the next scene
+            audio.addEventListener('ended', next);
+        }).catch((error) => {
+            console.error('Autoplay failed:', error);
+        });
+    }
+
+    function pause() {
+        video.pause();
+        audio.pause();
+    }
+
+    function next() {
+        // Reset overlay animation
+        overlay.style.animation = 'none';
+        void overlay.offsetWidth; // Trigger reflow
+        overlay.style.animation = null;
+
+        // Hide overlay
+        overlay.style.display = 'none';
+
+        // Increment scene
+        currentScene++;
+        if (currentScene > {{scene_length-1}}) {
+            // Reset to the first scene if reached the end
+            currentScene = 1;
         }
 
-        function playPause() {
-            var container2 = document.getElementById('container2');
-            container2.style.display = 'block';
-        }
+        // Update video, audio, and overlay text
+        video.src = data[currentScene].video;
+        audio.src = data[currentScene].audio;
+        overlayText.innerHTML = data[currentScene].text;
 
-        function pause() {
-            var container2 = document.getElementById('container2');
-            container2.style.display = 'none';
-        }
-
-        function next() {
-            // Add logic for the next button if needed
-        }
-    </script>
-
+        // Play video and audio
+        play();
+    }
+</script>
 </body>
 </html>

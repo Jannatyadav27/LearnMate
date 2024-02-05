@@ -128,9 +128,10 @@ def dashboard():
 
     videogen = GenerateVideo("photosynthesis")
     data_json = videogen.start()
+    scene_length = len(data_json)
 
     # Render the dashboard template with user information
-    return render_template('dashboard.html', user_entry=user_entry, data=data_json)
+    return render_template('dashboard.html', user_entry=user_entry, data_json=data_json, scene_length=scene_length)
 
 if __name__ == '__main__':
     app.run(debug=True)
