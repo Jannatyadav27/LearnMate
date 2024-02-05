@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="mt-5">
+        <h2 class="mb-4">Academics</h2>
+        <form method="post">
+            <div class="mb-3">
+                <label for="college" class="form-label">College/School</label>
+                <input type="text" class="form-control" id="college" name="college" required>
+            </div>
+            <div class="mb-3">
+                <label for="class_year" class="form-label">Class Standards or College Year</label>
+                <input type="text" class="form-control" id="class_year" name="class_year" required>
+            </div>
+            <div class="mb-3">
+                <label for="board" class="form-label">CBSE/State board/B.Tech</label>
+                <input type="text" class="form-control" id="board" name="board" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+{% endblock %}
