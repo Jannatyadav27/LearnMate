@@ -16,8 +16,8 @@
         .overlay {
             display: none;
             position: absolute;
-            
-            top:541px;
+            padding: 10px;
+            top:488px;
             left: 0;
             width: 100%;
             height: 10%;
@@ -206,10 +206,11 @@
         <!-- main -->
         <div class="main-container">
             <div id="video-container" class="mb-4 flex justify-center video-container">
-                <video id="video" class="video" muted playsinline>
+                <video id="video" class="video" muted playsinline >
                     <source  src="{{ data_json[1].video }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
+                <img src="{{ data_json[4].video }}" class="video" id="video_img" hidden>
                 <div id="overlay" class="overlay">
                     <p id="overlay-text"></p>
                 </div>
@@ -231,6 +232,7 @@
         }
 
         const video = document.getElementById('video');
+        const video_img = document.getElementById('video_img');
         const audio = document.getElementById('audio');
         const overlay = document.getElementById('overlay');
         const overlayText = document.getElementById('overlay-text');
@@ -279,20 +281,45 @@
 
             // Increment scene
             currentScene++;
-            if (currentScene > {{scene_length-1}}) {
+            if (currentScene > {{scene_length}}) {
                 // Reset to the first scene if reached the end
                 currentScene = 1;
+                return;
             }
 
             // Update video, audio, and overlay text
-            video.src = data[currentScene].video;
-            audio.src = data[currentScene].audio;
-            overlayText.innerHTML = data[currentScene].text;
+            const currentData = data[currentScene];
 
-            // Play video and audio
-            play();
+            // Determine whether it's a video or an image based on the presence of .mp4 in the link
+            const isVideo = currentData.video.toLowerCase().includes('.mp4');
+
+            if (isVideo) {
+                // If it's a video, set up video and audio
+                video.hidden = false;
+                video_img.hidden= true;
+                video.src = currentData.video;
+                audio.src = currentData.audio;
+                overlayText.innerHTML = data[currentScene].text;
+                
+                // Play video and audio
+                play();
+            } else {
+                // If it's an image, display the image
+                video.hidden = true;
+                video_img.hidden = false; 
+                video.src = ''; // Clear video source
+                audio.src = currentData.audio;
+                video_img.src = currentData.video;
+                overlayText.innerHTML = data[currentScene].text;
+                overlay.style.display = 'block';
+                overlay.style.animation = 'fade-in 2s forwards';
+                
+                audio.play();
+                // Set up event listener for audio end to trigger the next scene
+                audio.addEventListener('ended', next);
+            }
         }
-        </script>
+    </script>
 </body>
 
 </html>
