@@ -126,8 +126,7 @@
                 <div class="font-bold"><span class="text-2xl ">{{ user_entry.college_name | upper }}</span> (<span
                         class="text-1xl ">{{ user_entry.stream | upper }}</span>)</div>
                 {% else %}
-                <div class="font-bold"><span class="text-2xl ">LearnMate</span> (<span class="text-1xl ">{{
-                        user_entry.class_name | upper }} : {{ user_entry.board | upper }}</span>)</div>
+                <div class="font-bold"><span class="text-2xl ">LearnMate</span></div>
                 {% endif %}
                 <div class="flex items-center space-x-4">
                     <div class="card rounded-lg p-2 bg-gray-700">
@@ -150,7 +149,8 @@
 
         <!-- Left Sidebar -->
         <div class="sidebar">
-            <h2 class="text-lg font-semibold mb-4">Course Curriculum</h2>
+            <h2 class="text-lg font-semibold mb-4">Course Curriculum <span class="text-1xl border border-gray-500 rounded-md px-2 px-4 ml-2">{{
+                user_entry.class_name | upper }} : {{ user_entry.board | upper }}</span></h2>
 
             {% for key,value in course_curriculum.items() %}
             <div class="mb-2">
@@ -171,8 +171,8 @@
             </div>
             {% endfor %}
             <h2 class="text-center">OR</h2>
-            <form method="get">
-                <input type="text" name="topic" placeholder="Enter Your Custom Topic" />
+            <form method="get" class="mt-3">
+                <input type="text" name="topic" placeholder="Enter Your Custom Topic" class="appearance-none border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full">
             </form>
         </div>
 
@@ -188,14 +188,33 @@
                     <p id="overlay-text" class="text-center"></p>
                 </div>
             </div>
-            <button id="play-pause-btn" onclick="togglePlayPause()">▶️</button>
+            <button id="play-pause-btn" onclick="togglePlayPause()">▶️</button>       
         </div>
         <!-- end: main -->
+
+        <div id="quiz" class="flex justify-center w-full m-3" hidden>
+                <div id="quiz" class="w-full mb-4 justify-center bg-white p-6 rounded-md shadow-md">
+                <h1 class="text-xl font-semibold mb-4">Test</h1>
+                
+                <!-- Question 1 -->
+                <div class="mb-4">
+                    <p class="font-semibold">Question 1: What is the capital of France?</p>
+                    <ul class="ml-4">
+                        <li><input type="radio" id="q1a" name="q1"><label for="q1a" class="ml-2">Paris</label></li>
+                        <li><input type="radio" id="q1b" name="q1"><label for="q1b" class="ml-2">Berlin</label></li>
+                        <li><input type="radio" id="q1c" name="q1"><label for="q1c" class="ml-2">London</label></li>
+                        <li><input type="radio" id="q1d" name="q1"><label for="q1d" class="ml-2">Madrid</label></li>
+                    </ul>
+                </div>              
+                <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md w-full">Submit</button>
+            </div> 
+        </div>
 
     </div>
     <audio id="audio" src=""></audio>
 
     <script>
+        var quiz_data;
         var data;
         var scene_length;
         const video = document.getElementById('video');
@@ -205,6 +224,17 @@
         const overlayText = document.getElementById('overlay-text');
         const playPauseBtn = document.getElementById("play-pause-btn");
         let currentScene = 1;
+
+        async function fetchQuizDataFromAPI() {
+            try {
+                const quizresponse = await fetch(`/api/generate_quiz?topic=${encodeURIComponent('{{topic}}')}`);
+                const apiQuizData = await quizresponse.json();
+
+                quiz_data = apiQuizData.data_json;
+            } catch (error) {
+                console.error('Error fetching data from Quiz API:', error);
+            }
+        }
 
         async function fetchDataFromAPI() {
             try {
@@ -269,6 +299,7 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             fetchDataFromAPI();
+            // fetchQuizDataFromAPI();
         });
 
         function toggleDropdown(dropdownId) {

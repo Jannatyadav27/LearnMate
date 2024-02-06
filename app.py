@@ -187,5 +187,16 @@ def generate_video_api():
 
     return jsonify({'data_json': data_json, 'scene_length': scene_length})
 
+@app.route('/api/generate_quiz')
+def generate_quiz_api():
+    topic = request.args.get('topic', default='Photosynthesis')
+
+    # Generate video data based on the topic
+    videogen = GenerateVideo(topic)
+    data_json = videogen.start()
+    scene_length = len(data_json)
+
+    return jsonify({'data_json': data_json, 'scene_length': scene_length})
+
 if __name__ == '__main__':
     app.run(debug=True)
