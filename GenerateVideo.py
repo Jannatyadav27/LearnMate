@@ -1,6 +1,7 @@
 import g4f
 from gtts import gTTS
 import random, string 
+import cloudscraper
 from GenerateVoice import GenerateVoice
 
 class GenerateVideo:
@@ -29,7 +30,12 @@ class GenerateVideo:
         return random_string
 
     def search_video(self, text):
-        return ""
+        url = f'https://www.gettyimages.in/videos/{text.lower().strip().replace(" ", "-").replace(".", "")}?assettype=film&agreements=&phrase={text.replace(" ", "%20")}&sort=mostpopular'
+        scraper = cloudscraper.create_scraper()
+        html = scraper.get(url).text
+        link = html.split('"filmPreviewUrl":"')[1].split('","istockCollection"')[0]
+        link  = link.replace("\\u0026", "&")
+        return link
     
     def generate_audio(self, text, filename, language='en'):
         try:
@@ -43,7 +49,7 @@ class GenerateVideo:
 
     def start(self):
 
-        ddata = {
+        data = {
             1: {
                 "text": "Photosynthesis is the process by which plants convert sunlight, carbon dioxide, and water into glucose and oxygen.",
                 "video": "https://media.gettyimages.com/id/99150399/video/carbon-capture-photosynthesis.mp4?b=1&s=mp4-640x640-gi&k=20&c=EwPF8P4OFKVdGyLEpXD2EqaG1IPRsmEzWTVkp_sax08=",
@@ -76,20 +82,21 @@ class GenerateVideo:
             },
         }
 
-        data = {}
-        self.prompt = f"Write 5 concise points on topic: '{self.topic}'" 
-        content_list = self.generate_content(self.prompt)
-        print(content_list)
-        index = 1
+        # data = {}
+        # self.prompt = f"Write 5 concise points on topic: '{self.topic}'" 
+        # content_list = self.generate_content(self.prompt)
+        # print(content_list)
+        # index = 1
 
-        for text in content_list:
-            data[index] = {
-                "text": text,
-                # "video": self.search_video(text),
-                "video": ddata[index]["video"],
-                "audio": self.generate_audio(text, f'static/audio/{index}_{self.generate_random_4_chars()}.mp3')
-            }   
-            index += 1
+        # for text in content_list:
+        #     data[index] = {
+        #         "text": text,
+        #         "video": self.search_video(text),
+        #         "audio": self.generate_audio(text, f'static/audio/{index}_{self.generate_random_4_chars()}.mp3')
+        #     }   
+        #     index += 1
+        import time 
+        time.sleep(4)
 
         return data 
     

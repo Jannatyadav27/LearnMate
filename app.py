@@ -82,7 +82,7 @@ def authorized():
     user_entry = mongo.db.users.find_one({'user_id': user_id})
 
     if user_entry:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('dashboard', topic='Photosynthesis'))
     else:
         return redirect(url_for('academics'))
 
@@ -147,7 +147,7 @@ def academics():
                 'board': board,
             })
 
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('dashboard', topic='Photosynthesis'))
 
     return render_template('academics.html')
 
@@ -162,11 +162,19 @@ def dashboard():
     except:
         return redirect(url_for('logout'))
     
-    topic = request.args.get('topic', default='Photosynthesis')
+    topic = request.args.get('topic', default='Rain Water Harvestation')
+
+    course_curriculum = {
+        "Photosynthesis": ["Definition of Photsynthesis", "Chlorophyll"],
+        "Animal Cell": ["Definition of Photsynthesis", "Chlorophyll"],
+        "Plant Cell": ["Definition of Photsynthesis", "Chlorophyll"],
+        "Human Organ Systems": ["Definition of Photsynthesis", "Chlorophyll"],
+        "Respiration in Humans": ["Definition of Photsynthesis", "Chlorophyll"],
+    }
 
     # Retrieve user information from the database
     user_entry = mongo.db.users.find_one({'user_id': user_id})
-    return render_template('dashboard.html', user_entry=user_entry, topic=topic)
+    return render_template('dashboard.html', user_entry=user_entry, topic=topic, course_curriculum=course_curriculum)
 
 @app.route('/api/generate_video')
 def generate_video_api():

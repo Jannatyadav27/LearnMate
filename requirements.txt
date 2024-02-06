@@ -43,4 +43,5 @@ gunicorn
 python-dotenv
 Flask-PyMongo
 gtts
-secrets
+beautifulsoup4
+cloudscraper

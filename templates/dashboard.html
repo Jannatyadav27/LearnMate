@@ -7,7 +7,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>LearnMate Dashboard</title>
     <style>
-        html, body {
+        html,
+        body {
             overflow: hidden;
             height: 100%;
             margin: 0;
@@ -17,13 +18,14 @@
             display: none;
             position: absolute;
             padding: 10px;
-            top:488px;
+            top: 500px;
             left: 0;
             width: 100%;
             height: 10%;
             background: rgba(0, 0, 0, 0.7);
             color: white;
             overflow: hidden;
+            font-size: 30px;
         }
 
         #video-container {
@@ -31,10 +33,16 @@
             height: 93vh;
             overflow: hidden;
         }
-        .video{
+
+        .video {
             border: 2px solid #333;
             border-radius: 8px;
             height: 87vh;
+            background: black;
+        }
+
+        .video_img {
+            background-color: black;
         }
 
         /* Updated styles for sidebar and main container */
@@ -63,12 +71,13 @@
             padding: 20px;
             box-sizing: border-box;
             position: absolute;
-            top: 7.5%;
+            top: 8.5%;
             left: 27.5%;
             overflow: hidden;
         }
-                /* Center play/pause button */
-                #play-pause-btn {
+
+        /* Center play/pause button */
+        #play-pause-btn {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -80,93 +89,100 @@
             font-size: 50px;
             cursor: pointer;
         }
-        /* Add these styles for subtitle animation */
-#overlay-text {
-    opacity: 0;
-    animation: fade-in-out 2s forwards;
-}
 
-@keyframes fade-in-out {
-    0% {
-        opacity: 0;
-    }
-    20% {
-        opacity: 1;
-    }
-    80% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 1;
-    }
-}
+        /* Add these styles for subtitle animation */
+        #overlay-text {
+            opacity: 0;
+            animation: fade-in-out 2s forwards;
+        }
+
+        @keyframes fade-in-out {
+            0% {
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 
 <body class="font-sans bg-gray-100">
 
-<!-- Navbar -->
-<nav class="bg-gray-800 p-4 text-white">
-    <div class="container mx-auto">
-        <div class="flex justify-between items-center">
-            {% if user_entry.college_name %}
-            <div class="font-bold"><span class="text-2xl ">{{ user_entry.college_name | upper }}</span> (<span class="text-1xl ">{{ user_entry.stream | upper }}</span>)</div>
-            {% else %}
-            <div class="font-bold"><span class="text-2xl ">LearnMate</span> (<span class="text-1xl ">{{ user_entry.class_name | upper }} : {{ user_entry.board | upper }}</span>)</div>
-            {% endif %}
-            <div class="flex items-center space-x-4">
-                <div class="card rounded-lg p-2 bg-gray-700">
-                    <a href="#" class="hover:text-gray-300">Hours Spent {{ user_entry.hours_spend }}</a>
+    <!-- Navbar -->
+    <nav class="bg-gray-800 p-4 text-white">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center">
+                {% if user_entry.college_name %}
+                <div class="font-bold"><span class="text-2xl ">{{ user_entry.college_name | upper }}</span> (<span
+                        class="text-1xl ">{{ user_entry.stream | upper }}</span>)</div>
+                {% else %}
+                <div class="font-bold"><span class="text-2xl ">LearnMate</span> (<span class="text-1xl ">{{
+                        user_entry.class_name | upper }} : {{ user_entry.board | upper }}</span>)</div>
+                {% endif %}
+                <div class="flex items-center space-x-4">
+                    <div class="card rounded-lg p-2 bg-gray-700">
+                        <a href="#" class="hover:text-gray-300">Hours Spent {{ user_entry.hours_spend }}</a>
+                    </div>
+                    <div class="card rounded-lg p-2 bg-gray-700">
+                        <a href="#" class="hover:text-gray-300">Rank {{ user_entry.rank }}</a>
+                    </div>
+                    <div class="card rounded-lg p-2 bg-gray-700">
+                        <a href="#" class="hover:text-gray-300">Hi {{ user_entry.name }}</a>
+                    </div>
+                    <img src="{{ user_entry.picture }}" alt="User Picture" class="rounded-full h-8 w-8">
+                    <a href="{{ url_for('logout') }}" class="hover:text-gray-300">Logout</a>
                 </div>
-                <div class="card rounded-lg p-2 bg-gray-700">
-                    <a href="#" class="hover:text-gray-300">Rank {{ user_entry.rank }}</a>
-                </div>
-                <div class="card rounded-lg p-2 bg-gray-700">
-                    <a href="#" class="hover:text-gray-300">Hi {{ user_entry.name }}</a>
-                </div>
-                <img src="{{ user_entry.picture }}" alt="User Picture" class="rounded-full h-8 w-8">
-                <a href="{{ url_for('logout') }}" class="hover:text-gray-300">Logout</a>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <div class="flex-container">
 
         <!-- Left Sidebar -->
         <div class="sidebar">
             <h2 class="text-lg font-semibold mb-4">Course Curriculum</h2>
-            <!-- Dropdown 1 -->
+
+            {% for key,value in course_curriculum.items() %}
             <div class="mb-2">
-                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none"
-                    onclick="toggleDropdown('dropdown1')">
-                    <span>Dropdown 1</span>
+                <button
+                    class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none"
+                    onclick="toggleDropdown('dropdown{{ loop.index }}')">
+                    <a href="/dashboard?topic={{key}}">Chapter {{ loop.index }}: {{key}}</a>
                     <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
-                <!-- Dropdown 1 content -->
-                <div id="dropdown1" class="ml-2 hidden">
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 1</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 2</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 3</a>
+                <div id="dropdown{{ loop.index }}" class="ml-2 hidden">
+                    {% for subtopic in value %}
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">{{subtopic}}</a>
+                    {% endfor %}
                 </div>
             </div>
-
+            {% endfor %}
             <h2 class="text-center">OR</h2>
         </div>
 
         <!-- main -->
         <div class="main-container">
             <div id="video-container" class="mb-4 flex justify-center video-container">
-                <video id="video" class="video" muted playsinline >
-                    <source  src="" type="video/mp4">
+                <video id="video" class="video" width="1080px" muted playsinline>
+                    <source src="" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
-                <img src="" class="video" id="video_img" hidden>
+                <img width="1080px" src="" class="video" id="video_img" hidden>
                 <div id="overlay" class="overlay">
-                    <p id="overlay-text"></p>
+                    <p id="overlay-text" class="text-center"></p>
                 </div>
             </div>
             <button id="play-pause-btn" onclick="togglePlayPause()">▶️</button>
@@ -177,7 +193,7 @@
     <audio id="audio" src=""></audio>
 
     <script>
-        var data; 
+        var data;
         var scene_length;
         const video = document.getElementById('video');
         const video_img = document.getElementById('video_img');
@@ -189,6 +205,13 @@
 
         async function fetchDataFromAPI() {
             try {
+                overlayText.innerHTML = "Generating Video on '{{topic}}' using AI ...";
+                overlay.style.display = 'block';
+                overlay.style.animation = 'fade-in 2s forwards';
+                overlay.style.background = "white";
+                overlay.style.color = "black";
+
+                playPauseBtn.hidden = true;
                 video_img.src = "/static/img/loading_gif.gif";
                 video_img.hidden = false;
                 video.hidden = true;
@@ -198,38 +221,50 @@
 
                 data = apiData.data_json;
                 scene_length = apiData.scene_length;
+
+                overlay.style.animation = 'none';
+                void overlay.offsetWidth;
+                overlay.style.animation = null;
+                overlay.style.display = 'none';
+                overlay.style.background = "black";
+                overlay.style.color = "white";
+                overlay.style.height = "15%";
+
                 document.getElementById("play-pause-btn").hidden = false;
                 video_img.src = "static/img/player.jpg";
+                playPauseBtn.hidden = false;
+
+
+                video.addEventListener('mouseover', function () {
+                    // Show the play-pause button on mouseover
+                    playPauseBtn.hidden = false;
+                });
+
+                playPauseBtn.addEventListener('mouseover', function () {
+                    // Show the play-pause button on mouseover
+                    playPauseBtn.hidden = false;
+                });
+
+                video.addEventListener('mouseout', function () {
+                    // Hide the play-pause button on mouseout
+                    playPauseBtn.hidden = true;
+                });
+
+                video_img.addEventListener('mouseover', function () {
+                    // Show the play-pause button on mouseover
+                    playPauseBtn.hidden = false;
+                });
+
+                video_img.addEventListener('mouseout', function () {
+                    // Hide the play-pause button on mouseout
+                    playPauseBtn.hidden = true;
+                });
             } catch (error) {
                 console.error('Error fetching data from API:', error);
             }
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-            video.addEventListener('mouseover', function () {
-            // Show the play-pause button on mouseover
-                playPauseBtn.hidden = false;
-            });
-
-            playPauseBtn.addEventListener('mouseover', function () {
-            // Show the play-pause button on mouseover
-                playPauseBtn.hidden = false;
-            });
-
-            video.addEventListener('mouseout', function () {
-                // Hide the play-pause button on mouseout
-                playPauseBtn.hidden = true;
-            });
-
-            video_img.addEventListener('mouseover', function () {
-            // Show the play-pause button on mouseover
-                playPauseBtn.hidden = false;
-            });
-
-            video_img.addEventListener('mouseout', function () {
-                // Hide the play-pause button on mouseout
-                playPauseBtn.hidden = true;
-            });
             fetchDataFromAPI();
         });
 
@@ -245,12 +280,12 @@
             if (isVideo) {
                 video.hidden = false;
                 video_img.hidden = true;
-                video.src = data[currentScene].video; 
+                video.src = data[currentScene].video;
             }
             else {
                 video.hidden = true;
                 video_img.hidden = false;
-                video_img.src = data[currentScene].video; 
+                video_img.src = data[currentScene].video;
             }
 
             audio.src = data[currentScene].audio;
@@ -282,7 +317,7 @@
 
         function next() {
             overlay.style.animation = 'none';
-            void overlay.offsetWidth; 
+            void overlay.offsetWidth;
             overlay.style.animation = null;
             overlay.style.display = 'none';
 
@@ -297,7 +332,7 @@
 
             if (isVideo) {
                 video.hidden = false;
-                video_img.hidden= true;
+                video_img.hidden = true;
                 video.src = currentData.video;
                 audio.src = currentData.audio;
                 overlayText.innerHTML = data[currentScene].text;
@@ -305,7 +340,7 @@
                 play();
             } else {
                 video.hidden = true;
-                video_img.hidden = false; 
+                video_img.hidden = false;
                 video.src = '';
                 audio.src = currentData.audio;
                 video_img.src = currentData.video;
