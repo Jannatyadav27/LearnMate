@@ -98,6 +98,9 @@
                 <div class="card rounded-lg p-2 bg-gray-700">
                     <a href="#" class="hover:text-gray-300">Rank {{ user_entry.rank }}</a>
                 </div>
+                <div class="card rounded-lg p-2 bg-gray-700">
+                    <a href="#" class="hover:text-gray-300">Hi {{ user_entry.name }}</a>
+                </div>
                 <img src="{{ user_entry.picture }}" alt="User Picture" class="rounded-full h-8 w-8">
                 <a href="{{ url_for('logout') }}" class="hover:text-gray-300">Logout</a>
             </div>
@@ -128,79 +131,7 @@
                 </div>
             </div>
 
-            <!-- Repeat the above block for Dropdowns 2 to 5 -->
-            <!-- Dropdown 2 -->
-            <div class="mb-2">
-                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none"
-                    onclick="toggleDropdown('dropdown2')">
-                    <span>Dropdown 2</span>
-                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <!-- Dropdown 2 content -->
-                <div id="dropdown2" class="ml-2 hidden">
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 1</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 2</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 3</a>
-                </div>
-            </div>
-
-            <!-- Repeat the above block for Dropdowns 3 to 5 -->
-            <!-- Dropdown 3 -->
-            <div class="mb-2">
-                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none"
-                    onclick="toggleDropdown('dropdown3')">
-                    <span>Dropdown 3</span>
-                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <!-- Dropdown 3 content -->
-                <div id="dropdown3" class="ml-2 hidden">
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 1</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 2</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 3</a>
-                </div>
-            </div>
-
-            <!-- Dropdown 4 -->
-            <div class="mb-2">
-                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none"
-                    onclick="toggleDropdown('dropdown4')">
-                    <span>Dropdown 4</span>
-                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <!-- Dropdown 4 content -->
-                <div id="dropdown4" class="ml-2 hidden">
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 1</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 2</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 3</a>
-                </div>
-            </div>
-
-            <!-- Dropdown 5 -->
-            <div class="mb-2">
-                <button class="flex items-center w-full px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-400 focus:outline-none"
-                    onclick="toggleDropdown('dropdown5')">
-                    <span>Dropdown 5</span>
-                    <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <!-- Dropdown 5 content -->
-                <div id="dropdown5" class="ml-2 hidden">
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 1</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 2</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-300">Option 3</a>
-                </div>
-            </div>
+            <h2 class="text-center">OR</h2>
         </div>
 
         <!-- main -->
@@ -313,7 +244,7 @@
                 overlayText.innerHTML = data[currentScene].text;
                 overlay.style.display = 'block';
                 overlay.style.animation = 'fade-in 2s forwards';
-                
+
                 audio.play();
                 // Set up event listener for audio end to trigger the next scene
                 audio.addEventListener('ended', next);

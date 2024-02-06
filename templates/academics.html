@@ -53,7 +53,7 @@
         </div>
 
         <div id="schoolOptions" style="display: none;">
-            <select id="class" onchange="showBoard()">
+            <select name="class" id="class" onchange="showBoard()">
                 <option value="">Select Class</option>
                 <option value="class1">Class 1</option>
                 <option value="class2">Class 2</option>
@@ -70,7 +70,7 @@
             </select>
 
             <div id="boardOptions" style="display: none;">
-                <select id="board" onchange="showSubmit()">
+                <select name="board" id="board" onchange="showSubmit()">
                     <option value="">Select Board</option>
                     <option value="cbse">CBSE</option>
                     <option value="icse">ICSE</option>
@@ -256,7 +256,6 @@
             currentStep = 0;
         }
 
-        y
         window.onpopstate = function (event) {
             if (event.state !== null) {
                 currentStep = event.state.step;

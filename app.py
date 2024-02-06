@@ -99,39 +99,60 @@ def academics():
         Year
         College_Name/School_Name  
         """
-
-        educationType = request.form['educationType'] # Collge/School
-        stream  = request.form['stream']  # B.tect/BSC
-        course  = request.form['course']  # CS/IT/ECE
-        year    = request.form['year']    # 1/2/3/4
-        college_name = request.form['college_name']
-
-        print("educationType: ", educationType)
-        print("stream: ", stream)
-        print("course: ", course)
-        print('college_name: ', college_name)
-
         user_info = google.get('userinfo')
         user_id = user_info.data['id']
         email   = user_info.data['email']
         picture = user_info.data['picture']
         name    = user_info.data['name']
 
-        # Save the academic information to the database
-        mongo.db.users.insert_one({
-            'user_id': user_id, 
-            'email': email,
-            'picture': picture,
-            'name': name, 
-            'rank': mongo.db.users.count_documents({}) + 1, 
-            'hours_spend': 0,
+        educationType = request.form['educationType'] # Collge/School
+        if educationType == "college":
+            stream  = request.form['stream']  # B.tect/BSC
+            course  = request.form['course']  # CS/IT/ECE
+            year    = request.form['year']    # 1/2/3/4
+            college_name = request.form['college_name']
 
-            'educationType': educationType, 
-            'stream': stream, 
-            'course': course,
-            'year': year,
-            'college_name': college_name,
-        })
+            print("educationType: ", educationType)
+            print("stream: ", stream)
+            print("course: ", course)
+            print('college_name: ', college_name)
+
+            # Save the academic information to the database
+            mongo.db.users.insert_one({
+                'user_id': user_id, 
+                'email': email,
+                'picture': picture,
+                'name': name, 
+                'rank': mongo.db.users.count_documents({}) + 1, 
+                'hours_spend': 0,
+
+                'educationType': educationType, 
+                'stream': stream, 
+                'course': course,
+                'year': year,
+                'college_name': college_name,
+            })
+
+        else:
+            class_name = request.form['class']
+            board      = request.form['board']
+
+            print("class_name: ", class_name)
+            print("board: ", board)
+
+            # Save the academic information to the database
+            mongo.db.users.insert_one({
+                'user_id': user_id, 
+                'email': email,
+                'picture': picture,
+                'name': name, 
+                'rank': mongo.db.users.count_documents({}) + 1, 
+                'hours_spend': 0,
+
+                'educationType': educationType, 
+                'class_name': class_name, 
+                'board': board,
+            })
 
         return redirect(url_for('dashboard'))
 
@@ -147,12 +168,16 @@ def dashboard():
         user_id = user_info.data['id']
     except:
         return redirect(url_for('logout'))
+    
+    topic = request.args.get('topic', default='Photosynthesis')
 
     # Retrieve user information from the database
     user_entry = mongo.db.users.find_one({'user_id': user_id})
-    videogen = GenerateVideo("photosynthesis")
+    videogen = GenerateVideo(topic)
     data_json = videogen.start()
     scene_length = len(data_json)
+
+
 
     # Render the dashboard template with user information
     return render_template('dashboard.html', user_entry=user_entry, data_json=data_json, scene_length=scene_length)
