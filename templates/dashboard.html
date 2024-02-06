@@ -109,8 +109,11 @@
 <nav class="bg-gray-800 p-4 text-white">
     <div class="container mx-auto">
         <div class="flex justify-between items-center">
-            <div class="text-2xl font-bold">{{ user_entry.college_name | upper }} ({{ user_entry.stream | upper }})</div>
-            <!-- Add your navbar links here -->
+            {% if user_entry.college_name %}
+            <div class="font-bold"><span class="text-2xl ">{{ user_entry.college_name | upper }}</span> (<span class="text-1xl ">{{ user_entry.stream | upper }}</span>)</div>
+            {% else %}
+            <div class="font-bold"><span class="text-2xl ">LearnMate</span> (<span class="text-1xl ">{{ user_entry.class_name | upper }} : {{ user_entry.board | upper }}</span>)</div>
+            {% endif %}
             <div class="flex items-center space-x-4">
                 <div class="card rounded-lg p-2 bg-gray-700">
                     <a href="#" class="hover:text-gray-300">Hours Spent {{ user_entry.hours_spend }}</a>
@@ -166,7 +169,6 @@
                     <p id="overlay-text"></p>
                 </div>
             </div>
-
             <button id="play-pause-btn" onclick="togglePlayPause()">▶️</button>
         </div>
         <!-- end: main -->
@@ -177,20 +179,57 @@
     <script>
         var data; 
         var scene_length;
+        const video = document.getElementById('video');
+        const video_img = document.getElementById('video_img');
+        const audio = document.getElementById('audio');
+        const overlay = document.getElementById('overlay');
+        const overlayText = document.getElementById('overlay-text');
+        const playPauseBtn = document.getElementById("play-pause-btn");
+        let currentScene = 1;
 
         async function fetchDataFromAPI() {
             try {
+                video_img.src = "/static/img/loading_gif.gif";
+                video_img.hidden = false;
+                video.hidden = true;
+                document.getElementById("play-pause-btn").hidden = true;
                 const response = await fetch(`/api/generate_video?topic=${encodeURIComponent('{{topic}}')}`);
                 const apiData = await response.json();
 
                 data = apiData.data_json;
                 scene_length = apiData.scene_length;
+                document.getElementById("play-pause-btn").hidden = false;
+                video_img.src = "static/img/player.jpg";
             } catch (error) {
                 console.error('Error fetching data from API:', error);
             }
         }
 
         document.addEventListener("DOMContentLoaded", function () {
+            video.addEventListener('mouseover', function () {
+            // Show the play-pause button on mouseover
+                playPauseBtn.hidden = false;
+            });
+
+            playPauseBtn.addEventListener('mouseover', function () {
+            // Show the play-pause button on mouseover
+                playPauseBtn.hidden = false;
+            });
+
+            video.addEventListener('mouseout', function () {
+                // Hide the play-pause button on mouseout
+                playPauseBtn.hidden = true;
+            });
+
+            video_img.addEventListener('mouseover', function () {
+            // Show the play-pause button on mouseover
+                playPauseBtn.hidden = false;
+            });
+
+            video_img.addEventListener('mouseout', function () {
+                // Hide the play-pause button on mouseout
+                playPauseBtn.hidden = true;
+            });
             fetchDataFromAPI();
         });
 
@@ -199,15 +238,21 @@
             dropdown.classList.toggle('hidden');
         }
 
-        const video = document.getElementById('video');
-        const video_img = document.getElementById('video_img');
-        const audio = document.getElementById('audio');
-        const overlay = document.getElementById('overlay');
-        const overlayText = document.getElementById('overlay-text');
-        let currentScene = 1;
-
         function play() {
-            video.src = data[currentScene].video;
+            const currentData = data[currentScene];
+            const isVideo = currentData.video.toLowerCase().includes('.mp4');
+
+            if (isVideo) {
+                video.hidden = false;
+                video_img.hidden = true;
+                video.src = data[currentScene].video; 
+            }
+            else {
+                video.hidden = true;
+                video_img.hidden = false;
+                video_img.src = data[currentScene].video; 
+            }
+
             audio.src = data[currentScene].audio;
             video.play().then(() => {
                 audio.play();

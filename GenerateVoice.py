@@ -24,17 +24,14 @@ class GenerateVoice:
             "voice_settings": voice_settings
         }
 
-        try:
-            response = requests.post(self.url, json=data, headers=self.headers)
-            response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx status codes)
+        response = requests.post(self.url, json=data, headers=self.headers)
+        response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx status codes)
 
-            with open(output_file, 'wb') as f:
-                for chunk in response.iter_content(chunk_size=chunk_size):
-                    if chunk:
-                        f.write(chunk)
-            print("Audio file saved successfully.")
-        except requests.exceptions.RequestException as e:
-            print(f"Error: {e}")
+        with open(output_file, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=chunk_size):
+                if chunk:
+                    f.write(chunk)
+
 
 if __name__ == "__main__":
     from dotenv import load_dotenv

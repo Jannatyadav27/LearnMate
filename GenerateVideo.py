@@ -34,9 +34,11 @@ class GenerateVideo:
     def generate_audio(self, text, filename, language='en'):
         try:
             self.voicegen.convert_text_to_speech(text, filename)
+            print(f"{filename} generated using ElevenLabs")
         except:
             tts = gTTS(text=text, lang=language, slow=False)
             tts.save(filename)
+            print(f"{filename} generated using GTTS")
         return filename
 
     def start(self):
