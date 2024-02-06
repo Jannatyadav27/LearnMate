@@ -11,6 +11,7 @@ from GenerateVideo import GenerateVideo
 MONGODB_URI          = os.environ.get('MONGODB_URI') 
 GOOGLE_CLIENT_ID     = os.environ.get('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET') 
+ELEVEN_LABS_API      = os.environ.get('ELEVEN_LABS_API')
 
 app = Flask(__name__)
 

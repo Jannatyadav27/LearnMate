@@ -1,11 +1,22 @@
 import requests
 
-class TextToSpeechAPI:
-    def __init__(self, url, headers):
-        self.url = url
-        self.headers = headers
+class GenerateVoice:
+    def __init__(self, api):
+        self.url = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
+        self.headers = {
+            "Accept": "audio/mpeg",
+            "Content-Type": "application/json",
+            "xi-api-key": api
+        }
 
-    def convert_text_to_speech(self, text, model_id, voice_settings, output_file='output.mp3', chunk_size=1024):
+    def convert_text_to_speech(self, text, output_file='output.mp3', chunk_size=1024):
+        model_id = "eleven_monolingual_v1"
+        
+        voice_settings = {
+            "stability": 0.5,
+            "similarity_boost": 0.5
+        }
+        
         data = {
             "text": text,
             "model_id": model_id,
@@ -25,21 +36,13 @@ class TextToSpeechAPI:
             print(f"Error: {e}")
 
 if __name__ == "__main__":
-    url = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
-    headers = {
-        "Accept": "audio/mpeg",
-        "Content-Type": "application/json",
-        "xi-api-key": "d6a1adbbd3c0060cf386d4689610c1b3"
-    }
+    from dotenv import load_dotenv
+    load_dotenv()
+    import os 
 
-    api = TextToSpeechAPI(url, headers)
+    ELEVEN_LABS_API = os.environ.get('ELEVEN_LABS_API')
 
+    api = GenerateVoice(ELEVEN_LABS_API)
     text = "Born and raised in the charming south, I can add a touch of sweet southern hospitality to your audiobooks and podcasts"
-    model_id = "eleven_monolingual_v1"
-    voice_settings = {
-        "stability": 0.5,
-        "similarity_boost": 0.5
-    }
-
-    api.convert_text_to_speech(text, model_id, voice_settings)
+    api.convert_text_to_speech(text, "static/audio/output.mp3")
 
