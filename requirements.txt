@@ -43,3 +43,4 @@ gunicorn
 python-dotenv
 Flask-PyMongo
 gtts
+secrets

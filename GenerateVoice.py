@@ -2,6 +2,7 @@ import requests
 
 class GenerateVoice:
     def __init__(self, api):
+        print("ELEVEN_LABS_API: ", api)
         self.url = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
         self.headers = {
             "Accept": "audio/mpeg",

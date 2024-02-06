@@ -92,14 +92,6 @@ def academics():
         return redirect(url_for('index'))
 
     if request.method == 'POST':
-        # Save the academic information to the database
-
-        """"
-        College
-        Degree
-        Year
-        College_Name/School_Name  
-        """
         user_info = google.get('userinfo')
         user_id = user_info.data['id']
         email   = user_info.data['email']
@@ -174,11 +166,9 @@ def dashboard():
 
     # Retrieve user information from the database
     user_entry = mongo.db.users.find_one({'user_id': user_id})
-    videogen = GenerateVideo(topic)
+    videogen = GenerateVideo(topic, ELEVEN_LABS_API)
     data_json = videogen.start()
     scene_length = len(data_json)
-
-
 
     # Render the dashboard template with user information
     return render_template('dashboard.html', user_entry=user_entry, data_json=data_json, scene_length=scene_length)

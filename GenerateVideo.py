@@ -1,28 +1,47 @@
 import g4f
 from gtts import gTTS
+import random, string 
+from GenerateVoice import GenerateVoice
 
 class GenerateVideo:
-    def __init__(self, topic):
+    def __init__(self, topic, ELEVEN_LABS_API):
         self.topic = topic  
+        self.voicegen = GenerateVoice(ELEVEN_LABS_API)
 
     def generate_content(self, text):
         try:
             response = g4f.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": text}])
-            content_list = response.split("\n")
+            raw_content_list = response.split("\n")
+            content_list = []
+            for raw_content in raw_content_list:
+                content = raw_content.strip().lower()
+                if content != "" and "certainly!" not in content:
+                    if ". " in content[:5]:
+                        content = content.split(".", 1)[-1].strip()
+                    content_list.append(content.strip())
+
             return content_list
         except Exception as e:
             print("Error: ", e)
+
+    def generate_random_4_chars(self):
+        random_string = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(4))
+        return random_string
 
     def search_video(self, text):
         return ""
     
     def generate_audio(self, text, filename, language='en'):
-        tts = gTTS(text=text, lang=language, slow=False)
-        tts.save(filename)
+        try:
+            self.voicegen.convert_text_to_speech(text, filename)
+        except:
+            tts = gTTS(text=text, lang=language, slow=False)
+            tts.save(filename)
+        return filename
 
     def start(self):
 
-        data = {
+        ddata = {
             1: {
                 "text": "Photosynthesis is the process by which plants convert sunlight, carbon dioxide, and water into glucose and oxygen.",
                 "video": "https://media.gettyimages.com/id/99150399/video/carbon-capture-photosynthesis.mp4?b=1&s=mp4-640x640-gi&k=20&c=EwPF8P4OFKVdGyLEpXD2EqaG1IPRsmEzWTVkp_sax08=",
@@ -55,17 +74,20 @@ class GenerateVideo:
             },
         }
 
-        # self.prompt = "" + self.topic
-        # content_length = self.generate_content(self.prompt)
-        # index = 1
+        data = {}
+        self.prompt = f"Write 5 concise points on topic: '{self.topic}'" 
+        content_list = self.generate_content(self.prompt)
+        print(content_list)
+        index = 1
 
-
-        # for text in content_length:
-        #     data[index] = {
-        #         "text": text,
-        #         "video": self.search_video(),
-        #         "audio": self.generate_audio(text, f'{index}.mp3')
-        #     }   
+        for text in content_list:
+            data[index] = {
+                "text": text,
+                # "video": self.search_video(text),
+                "video": ddata[index]["video"],
+                "audio": self.generate_audio(text, f'static/audio/{index}_{self.generate_random_4_chars()}.mp3')
+            }   
+            index += 1
 
         return data 
     
