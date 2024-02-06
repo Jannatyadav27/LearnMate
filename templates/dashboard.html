@@ -158,10 +158,10 @@
         <div class="main-container">
             <div id="video-container" class="mb-4 flex justify-center video-container">
                 <video id="video" class="video" muted playsinline >
-                    <source  src="{{ data_json[1].video }}" type="video/mp4">
+                    <source  src="" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
-                <img src="{{ data_json[4].video }}" class="video" id="video_img" hidden>
+                <img src="" class="video" id="video_img" hidden>
                 <div id="overlay" class="overlay">
                     <p id="overlay-text"></p>
                 </div>
@@ -172,11 +172,28 @@
         <!-- end: main -->
 
     </div>
-
-    <!-- Add your audio elements here -->
-    <audio id="audio" src="{{ data_json[1].audio }}"></audio>
+    <audio id="audio" src=""></audio>
 
     <script>
+        var data; 
+        var scene_length;
+
+        async function fetchDataFromAPI() {
+            try {
+                const response = await fetch(`/api/generate_video?topic=${encodeURIComponent('{{topic}}')}`);
+                const apiData = await response.json();
+
+                data = apiData.data_json;
+                scene_length = apiData.scene_length;
+            } catch (error) {
+                console.error('Error fetching data from API:', error);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchDataFromAPI();
+        });
+
         function toggleDropdown(dropdownId) {
             var dropdown = document.getElementById(dropdownId);
             dropdown.classList.toggle('hidden');
@@ -187,21 +204,18 @@
         const audio = document.getElementById('audio');
         const overlay = document.getElementById('overlay');
         const overlayText = document.getElementById('overlay-text');
-        var data = {{ data_json | tojson }};
         let currentScene = 1;
 
         function play() {
-            // Autoplay video
+            video.src = data[currentScene].video;
+            audio.src = data[currentScene].audio;
             video.play().then(() => {
-                // Autoplay audio
                 audio.play();
 
-                // Display overlay with text
                 overlayText.innerHTML = data[currentScene].text;
                 overlay.style.display = 'block';
                 overlay.style.animation = 'fade-in 2s forwards';
 
-                // Set up event listener for audio end to trigger the next scene
                 audio.addEventListener('ended', next);
             }).catch((error) => {
                 console.error('Autoplay failed:', error);
@@ -222,43 +236,32 @@
         }
 
         function next() {
-            // Reset overlay animation
             overlay.style.animation = 'none';
-            void overlay.offsetWidth; // Trigger reflow
+            void overlay.offsetWidth; 
             overlay.style.animation = null;
-
-            // Hide overlay
             overlay.style.display = 'none';
 
-            // Increment scene
             currentScene++;
-            if (currentScene > {{scene_length}}) {
-                // Reset to the first scene if reached the end
+            if (currentScene > scene_length) {
                 currentScene = 1;
                 return;
             }
 
-            // Update video, audio, and overlay text
             const currentData = data[currentScene];
-
-            // Determine whether it's a video or an image based on the presence of .mp4 in the link
             const isVideo = currentData.video.toLowerCase().includes('.mp4');
 
             if (isVideo) {
-                // If it's a video, set up video and audio
                 video.hidden = false;
                 video_img.hidden= true;
                 video.src = currentData.video;
                 audio.src = currentData.audio;
                 overlayText.innerHTML = data[currentScene].text;
-                
-                // Play video and audio
+
                 play();
             } else {
-                // If it's an image, display the image
                 video.hidden = true;
                 video_img.hidden = false; 
-                video.src = ''; // Clear video source
+                video.src = '';
                 audio.src = currentData.audio;
                 video_img.src = currentData.video;
                 overlayText.innerHTML = data[currentScene].text;
@@ -266,7 +269,6 @@
                 overlay.style.animation = 'fade-in 2s forwards';
 
                 audio.play();
-                // Set up event listener for audio end to trigger the next scene
                 audio.addEventListener('ended', next);
             }
         }

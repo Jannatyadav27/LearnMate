@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, session, request
+from flask import Flask, redirect, url_for, render_template, session, request, jsonify
 from flask_pymongo import PyMongo
 from flask_oauthlib.client import OAuth
 from functools import wraps
@@ -166,12 +166,18 @@ def dashboard():
 
     # Retrieve user information from the database
     user_entry = mongo.db.users.find_one({'user_id': user_id})
+    return render_template('dashboard.html', user_entry=user_entry, topic=topic)
+
+@app.route('/api/generate_video')
+def generate_video_api():
+    topic = request.args.get('topic', default='Photosynthesis')
+
+    # Generate video data based on the topic
     videogen = GenerateVideo(topic, ELEVEN_LABS_API)
     data_json = videogen.start()
     scene_length = len(data_json)
 
-    # Render the dashboard template with user information
-    return render_template('dashboard.html', user_entry=user_entry, data_json=data_json, scene_length=scene_length)
+    return jsonify({'data_json': data_json, 'scene_length': scene_length})
 
 if __name__ == '__main__':
     app.run(debug=True)
